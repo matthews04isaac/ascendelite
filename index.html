@@ -1346,8 +1346,32 @@
       }
     });
     if (!valid) return;
-    document.getElementById('formSuccess').style.display = 'block';
-    document.querySelector('.btn-primary[onclick]').style.display = 'none';
+
+    const btn = document.querySelector('.btn-primary[onclick]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    emailjs.send("service_o35viuj", "template_ue0r35l", {
+      first_name: document.getElementById('fname').value,
+      last_name:  document.getElementById('lname').value,
+      email:      document.getElementById('email').value,
+      phone:      document.getElementById('phone').value,
+      age:        document.getElementById('age').value,
+      position:   document.getElementById('position').value,
+      program:    document.getElementById('program').value,
+      notes:      document.getElementById('notes').value,
+    })
+    .then(() => {
+      btn.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    })
+    .catch((err) => {
+      console.error(err);
+      btn.textContent = originalText;
+      btn.disabled = false;
+      alert('Something went wrong. Please email us directly at ascendelitehockey@gmail.com');
+    });
   }
 
   // Fade in on scroll
@@ -1364,47 +1388,6 @@
     el.style.transform = 'translateY(24px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var form = document.querySelector('#register .form-card form') 
-            || document.querySelector('#register form')
-            || document.querySelector('.form-card');
-
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const btn = this.querySelector('button[type="submit"]') || this.querySelector('button');
-        const originalText = btn.textContent;
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
-
-        emailjs.send("service_o35viuj", "template_ue0r35l", {
-          first_name: this.querySelector('[name="first_name"]').value,
-          last_name:  this.querySelector('[name="last_name"]').value,
-          email:      this.querySelector('[name="email"]').value,
-          phone:      this.querySelector('[name="phone"]').value,
-          age:        this.querySelector('[name="age"]').value,
-          position:   this.querySelector('[name="position"]').value,
-          program:    this.querySelector('[name="program"]').value,
-          notes:      this.querySelector('[name="notes"]').value,
-        })
-        .then(() => {
-          document.querySelector('#register .form-card').style.display = 'none';
-          document.querySelector('#register .form-success').style.display = 'block';
-        })
-        .catch((err) => {
-          console.error(err);
-          btn.textContent = originalText;
-          btn.disabled = false;
-          alert('Something went wrong. Please email us at ascendelitehockey@gmail.com');
-        });
-      });
-    } else {
-      console.error('Form not found');
-    }
   });
 </script>
 </body>
