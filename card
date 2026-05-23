@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isaac Matthews — Ascend Elite Hockey Development</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --black: #080a0c;
+      --deep: #0d1117;
+      --panel: #111820;
+      --border: #2a1a1a;
+      --ice: #f5f0ee;
+      --ice-dim: #d4c4be;
+      --gold: #C8102E;
+      --white: #f5f0ee;
+      --muted: #8a7570;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Subtle rink grid overlay — matches main site */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(245,240,238,0.018) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(245,240,238,0.018) 60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(200,16,46,0.12) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0;
+      animation: fadeUp 0.7s ease both;
+      overflow: hidden;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Red top bar — same as testimonial card on main site */
+    .card::before {
+      content: '';
+      display: block;
+      height: 3px;
+      background: var(--gold);
+      width: 100%;
+    }
+
+    .card-inner {
+      padding: 2rem 2rem 1.75rem;
+    }
+
+    /* ===== LOGO ROW ===== */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .logo-row img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .brand-block {}
+
+    .brand-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ===== NAME / TITLE ===== */
+    .name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 2px;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .role {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ===== CONTACTS ===== */
+    .contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--ice-dim);
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--white); }
+
+    .contact-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(200,16,46,0.08);
+      border: 1px solid rgba(200,16,46,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
+    }
+
+    .contact-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ===== QR SECTION ===== */
+    .qr-section {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .qr-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    #qrcode {
+      background: var(--ice);
+      padding: 10px;
+      display: inline-block;
+    }
+
+    #qrcode img, #qrcode canvas {
+      display: block;
+    }
+
+    /* Save contact button — matches .btn-ghost from main site */
+    .save-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      background: transparent;
+      color: var(--ice-dim);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: border-color 0.2s, color 0.2s;
+      margin-top: 4px;
+    }
+
+    .save-btn:hover {
+      border-color: var(--ice-dim);
+      color: var(--white);
+    }
+
+    .save-btn svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ===== FOOTER TAGLINE ===== */
+    .tagline {
+      margin-top: 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: var(--gold);
+      opacity: 0.4;
+      z-index: 1;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="card-inner">
+
+      <div class="logo-row">
+        <img src="0.png" alt="Ascend Elite Hockey logo" />
+        <div class="brand-block">
+          <div class="brand-name">ASCEND</div>
+          <div class="brand-sub">Elite Hockey Development</div>
+        </div>
+      </div>
+
+      <p class="name">Isaac Matthews</p>
+      <p class="role">Lead Coach &amp; Co-Founder</p>
+
+      <div class="divider"></div>
+
+      <div class="contacts">
+        <a class="contact-link" href="tel:4036711740">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .92h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </span>
+          403-671-1740
+        </a>
+        <a class="contact-link" href="mailto:ascendelitehockey@gmail.com">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+          </span>
+          ascendelitehockey@gmail.com
+        </a>
+        <a class="contact-link" href="https://ascendelitehockey.com" target="_blank" rel="noopener">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          </span>
+          ascendelitehockey.com
+        </a>
+      </div>
+
+      <div class="qr-section">
+        <span class="qr-label">Share this card</span>
+        <div id="qrcode"></div>
+        <button class="save-btn" onclick="saveContact()">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Save Contact
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tagline">ASCEND. YOUR. GAME.</div>
+
+  <script>
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://ascendelitehockey.com/card",
+      width: 140,
+      height: 140,
+      colorDark: "#080a0c",
+      colorLight: "#f5f0ee",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    function saveContact() {
+      const vcard =
+        "BEGIN:VCARD\n" +
+        "VERSION:3.0\n" +
+        "FN:Isaac Matthews\n" +
+        "ORG:Ascend Elite Hockey Development\n" +
+        "TITLE:Lead Coach & Co-Founder\n" +
+        "TEL;TYPE=CELL:4036711740\n" +
+        "EMAIL:ascendelitehockey@gmail.com\n" +
+        "URL:https://ascendelitehockey.com\n" +
+        "END:VCARD";
+      const blob = new Blob([vcard], { type: "text/vcard" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "isaac-matthews.vcf";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>
